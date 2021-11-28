@@ -1,15 +1,18 @@
 <?php
-session_start();
 require_once('pdo_controller.php');
 $rows = [];
 
 
 
-if (isset($_POST['confirm_send']) && empty($_SESSION['error'])) {
+if (isset($_POST['confirm_send'])) {
     $success = $board->insert();
 }
 
-$rows = $board->select();
+if (isset($_POST['execute_modify'])) {
+    $success = $board->comment_modify();
+}
+
+$rows = $board->index_select();
 
 ?>
 <style>
@@ -28,6 +31,11 @@ $rows = $board->select();
     span {
         color: green;
     }
+
+    .btn {
+        text-align: right;
+    }
+
 </style>
 <!DOCTYPE html>
 <html>
@@ -45,8 +53,10 @@ $rows = $board->select();
             <p class="index">投稿内容</p>
             <?php foreach ($rows as $row): ?>
                 <div class="content">
-                    <p>名前:<?= $row['name'] ?> <?= $row['post_date'] ?><p></p>
-                    <?= $row['message'] ?>
+                    <form action="post_detail.php" method="get">
+                        <?= $row['message'] ?> <?= $row['post_date'] ?> 
+                        <div class="btn"><button type="submit" name="id" value="<?= $row['id'] ?>">投稿詳細</button></div>
+                    </form>
                 </div>
                 <br>
             <?php endforeach ?>
