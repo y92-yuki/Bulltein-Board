@@ -14,15 +14,22 @@ class Content {
         }
     }
 
-    public function select() {
-        if ($stmt = $this->pdo->prepare("SELECT * FROM content ORDER BY id DESC")) {
+    public function index_select() {
+        if ($stmt = $this->pdo->prepare("SELECT id, message, post_date FROM content ORDER BY id DESC")) {
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
     }
 
-    public function comment_controller() {
-        if (isset($_POST['message_send'])) {
+    public function detail_select() {
+        $stmt = $this->pdo->prepare("SELECT * FROM content WHERE id = :id");
+        $stmt->bindValue('id', $_GET['id'],PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function comment_controller($send) {
+        if (isset($send)) {
             if (empty($_POST['name'])) {
                 $name_error = '名前を入力してください';
             }
@@ -48,6 +55,14 @@ class Content {
         $stmt->bindValue('message', $_POST['message'],PDO::PARAM_STR);
         $stmt->execute();
         return 'コメントを投稿しました';
+    }
+
+    public function comment_modify() {
+        $stmt = $this->pdo->prepare("UPDATE content SET message = :modify_message WHERE id = :modify_id");
+        $stmt->bindValue('modify_message', $_POST['modify_message'],PDO::PARAM_STR);
+        $stmt->bindValue('modify_id', $_POST['modify_id'],PDO::PARAM_INT);;
+        $stmt->execute();
+        return 'コメントを編集しました';
     }
     
 }
