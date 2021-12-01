@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once('pdo_controller.php');
 $rows = [];
 
@@ -10,6 +11,14 @@ if (isset($_POST['confirm_send'])) {
 
 if (isset($_POST['execute_modify'])) {
     $success = $board->comment_modify();
+    $_SESSION = [];
+    session_destroy();
+}
+
+if (isset($_POST['id'])) {
+    $delete = $board->delete();
+    $_SESSION = [];
+    session_destroy();
 }
 
 $rows = $board->index_select();
@@ -47,6 +56,9 @@ $rows = $board->index_select();
         <span><?php if (isset($success)) {
             echo $success;
         } ?></span>
+        <p style="color: red;"><?php if (isset($delete)) {
+            echo $delete;
+        } ?></p>
         <h1>ひと言掲示板</h1>
         <button type="button" onclick="location.href='post.php'">投稿画面へ</button>
         <?php if (isset($rows)): ?>
