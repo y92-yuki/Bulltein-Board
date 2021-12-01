@@ -41,11 +41,7 @@ class Content {
             if (!empty($name_error || $comment_error)) {
                 $errors = [$name_error, $comment_error]; 
                 return array_filter($errors);       
-            }elseif (!empty($name_error)) {
-                return $comment_error;
-            }elseif (!empty($comment_error)) {
-                return $name_error;
-            }
+             }
         }
     }        
     
@@ -63,6 +59,13 @@ class Content {
         $stmt->bindValue('modify_id', $_POST['modify_id'],PDO::PARAM_INT);;
         $stmt->execute();
         return 'コメントを編集しました';
+    }
+
+    public function delete() {
+        $stmt = $this->pdo->prepare("DELETE FROM content WHERE id = :id");
+        $stmt->bindValue('id',$_POST['id'],PDO::PARAM_INT);
+        $stmt->execute();
+        return 'コメントを削除しました';
     }
     
 }
