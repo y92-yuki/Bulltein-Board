@@ -1,14 +1,14 @@
 <?php
-class Content {
-    const DSN = 'mysql:host=localhost;dbname=board';
-    const USER = 'root';
-    const PASSWORD = 'root';
+require('./vendor/autoload.php');
+Dotenv\Dotenv::createImmutable(__DIR__)->load();
 
+class Content {
+    
     private $pdo;
 
     public function __construct() {
         try {
-            $this->pdo = new PDO(self::DSN,self::USER,self::PASSWORD);
+            $this->pdo = new PDO($_ENV['DSN'],$_ENV['DB_USER'],$_ENV['DB_PASSWORD']);
         } catch (PDOException $e){
             echo $e->getMessage();
         }
