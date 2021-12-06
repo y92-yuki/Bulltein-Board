@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('pdo_controller.php');
+require_once('content.php');
 
 $record = $board->detail_select();
 
@@ -9,9 +9,6 @@ $_SESSION['name']      = $record['name'];
 $_SESSION['message']   = $record['message'];
 $_SESSION['post_date'] = $record['post_date'];
 
-if (isset($_POST['modify_confirm_send'])) {
-    $_SESSION['messge'] = $_POST['message'];
-}
 
 $errors = $board->comment_controller($_POST['modify_confirm_send']);
 $error = ['comment_error' => $errors[1]];
