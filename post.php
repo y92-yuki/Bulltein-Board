@@ -1,5 +1,5 @@
 <?php
-require_once('pdo_controller.php');
+require_once('content.php');
 
 
 $error = $board->comment_controller($_POST['message_send']);
