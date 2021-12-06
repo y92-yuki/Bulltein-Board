@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('pdo_controller.php');
+require_once('content.php');
 $rows = [];
 
 
@@ -16,7 +16,7 @@ if (isset($_POST['execute_modify'])) {
 }
 
 if (isset($_POST['id'])) {
-    $delete = $board->delete();
+    $success = $board->delete();
     $_SESSION = [];
     session_destroy();
 }
@@ -37,10 +37,6 @@ $rows = $board->index_select();
         font-size: 20px;
     }
 
-    span {
-        color: green;
-    }
-
     .btn {
         text-align: right;
     }
@@ -53,12 +49,13 @@ $rows = $board->index_select();
     <title>掲示板</title>
     </head>
     <body>
-        <span><?php if (isset($success)) {
-            echo $success;
-        } ?></span>
-        <p style="color: red;"><?php if (isset($delete)) {
-            echo $delete;
-        } ?></p>
+        <?php if (isset($success)): ?>
+            <?php if ($success === 'コメントを投稿しました' || $success === 'コメントを編集しました' || $success === 'コメントを削除しました'): ?>
+                <p style="color: green;"><?= $success ?></p>
+            <?php else: ?>
+                <p style="color: red;"><?= $success ?></p>
+            <?php endif ?>
+        <?php endif ?>
         <h1>ひと言掲示板</h1>
         <button type="button" onclick="location.href='post.php'">投稿画面へ</button>
         <?php if (isset($rows)): ?>
