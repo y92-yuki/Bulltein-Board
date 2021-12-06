@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('pdo_controller.php');
+require_once('content.php');
 
 ?>
 
